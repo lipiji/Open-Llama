@@ -9,7 +9,7 @@ Description:
 Copyright (c) 2023 by LiangSong(sl12160010@gmail.com), All Rights Reserved. 
 """
 import random
-from dataset.data_iter import DataIter, create_shard_kwargs
+from data_iter import DataIter, create_shard_kwargs
 
 wudao_patterns = [
     "data/pretrain_data/part-wudao-*.jsonl.zst",
@@ -22,10 +22,50 @@ pile_patterns = [
 ]
 pile_paths = create_shard_kwargs(pile_patterns)
 random.shuffle(pile_paths)
-paths = wudao_paths[:5] + pile_paths[:10]
+
+pnews_patterns = [
+    "data/pretrain_data/part-pnews-*.jsonl.zst",
+]
+pnews_paths = create_shard_kwargs(pnews_patterns)
+random.shuffle(pnews_paths)
+
+pbaike_patterns = [
+    "data/pretrain_data/part-pbaike-*.jsonl.zst",
+]
+pbaike_paths = create_shard_kwargs(pbaike_patterns)
+random.shuffle(pbaike_paths)
+
+pshici_patterns = [
+    "data/pretrain_data/part-pshici-*.jsonl.zst",
+]
+pshici_paths = create_shard_kwargs(pshici_patterns)
+random.shuffle(pshici_paths)
+
+plyrics_patterns = [
+    "data/pretrain_data/part-plyrics-*.jsonl.zst",
+]
+plyrics_paths = create_shard_kwargs(plyrics_patterns)
+random.shuffle(plyrics_paths)
+
+
+pcouplets_patterns = [
+    "data/pretrain_data/part-pcouplets-*.jsonl.zst",
+]
+pcouplets_paths = create_shard_kwargs(pcouplets_patterns)
+random.shuffle(pcouplets_paths)
+
+
+paths = pile_paths[:250] + pbaike_paths[:40] + pnews_paths[:40] + wudao_paths[:10] \
+        + pcouplets_paths + plyrics_paths[:10] + pshici_paths
+
 transform_dict = {
     "wudao": lambda line: line["title"] + "\n" + line["content"],
     "pile": lambda line: line["text"],
+    "pnews": lambda line: line["title"] + "\n" + line["text"],
+    "pbaike":lambda line: line["title"] + "\n" + line["main_content"],
+    "pshici": lambda line: line["title"] + "\n" + line["author"] +"\n" + line["text"],
+    "plyrics": lambda line: line["title"] + "\n" + line["singer"] +"\n" + line["text"],
+    "pcouplets": lambda line: line["text"],
 }
 data_iter = iter(DataIter(paths, transform_dict))
 
@@ -56,7 +96,7 @@ spm.SentencePieceTrainer.train(
 )
 
 # Serialize the model as file.
-with open("configs/10w_vocab_wudao5_pile10.model", "wb") as f:
+with open("configs/10w_vocab_guyu.model", "wb") as f:
     f.write(model.getvalue())
 
 # Directly load the model from serialized model.
