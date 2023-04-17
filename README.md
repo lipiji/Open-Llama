@@ -98,6 +98,8 @@ bash data/download_wudao.sh
 
 其中the pile数据集包含210607728行json line，悟道数据集包含59132213行json line。
 
+pile 3214, wudao-903, pnews-978, pbaike-226, lyrics-100, 
+
 具体数据格式如下
 ```
 WuDao
