@@ -67,7 +67,12 @@ class DataIter(IterableDataset):
                     line["dataset"] = dataset_name
                     # Transformation, including sample, tokenize, etc.
                     if self.transform_dict:
-                        line = self.transform_dict[dataset_name](line)
+                        try:
+                            line = self.transform_dict[dataset_name](line)
+                        except BaseException as e:
+                            print(line) 
+                            print('Failed key: ' + str(e))
+                            line = None
                         # skip bad doc
                         if line is None:
                             continue
