@@ -55,7 +55,7 @@ pcouplets_paths = create_shard_kwargs(pcouplets_patterns)
 random.shuffle(pcouplets_paths)
 
 
-paths = pile_paths[:180] + pbaike_paths[:20] + pnews_paths[:20] + wudao_paths[:10] \
+paths = pile_paths[:128] + pbaike_paths[:20] + pnews_paths[:20] + wudao_paths[:10] \
         + pcouplets_paths + plyrics_paths[:5] + pshici_paths
 
 transform_dict = {
@@ -84,7 +84,7 @@ spm.SentencePieceTrainer.train(
     pad_id=3,
     model_type="BPE",
     vocab_size=100000,
-    #num_threads=32,
+    num_threads=32,
     # split digits and fallback to byte same as Llama.
     # set split_by_unicode_script to True to avoid grouping punctuation and characters together.
     split_digits=True,
