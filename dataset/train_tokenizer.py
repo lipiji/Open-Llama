@@ -55,8 +55,8 @@ pcouplets_paths = create_shard_kwargs(pcouplets_patterns)
 random.shuffle(pcouplets_paths)
 
 
-paths = pile_paths[:160] + pbaike_paths[:15] + pnews_paths[:15] + wudao_paths[:8] \
-        + pcouplets_paths + plyrics_paths[:5] + pshici_paths
+paths = pile_paths[:128] + pbaike_paths[:16] + pnews_paths[:16] + wudao_paths[:8] \
+        + pcouplets_paths + plyrics_paths[:8] + pshici_paths
 
 transform_dict = {
     "wudao": lambda line: line["title"] + "\n" + line["content"],
