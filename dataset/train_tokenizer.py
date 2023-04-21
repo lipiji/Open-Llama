@@ -81,6 +81,9 @@ spm.SentencePieceTrainer.train(
     train_extremely_large_corpus=True,
     # hyperparameters of tokenizer
     max_sentence_length=16384,
+    unk_id=0,
+    bos_id=1,
+    eos_id=2,
     pad_id=3,
     model_type="BPE",
     vocab_size=100000,
