@@ -27,6 +27,11 @@ from dataset.collate_fn import collate_fn_gen
 from dataset.pretrain_dataset import (
     preprocess_the_pile_gen,
     preprocess_wudao_gen,
+    preprocess_pnews_gen,
+    preprocess_pbaike_gen,
+    preprocess_pshici_gen,
+    preprocess_plyrics_gen,
+    preprocess_pcouplets_gen,
 )
 from configs.pretrain_config import *
 
@@ -47,6 +52,11 @@ random.shuffle(paths)
 transform_dict = {
     "wudao": preprocess_wudao_gen(tokenizer, max_length),
     "pile": preprocess_the_pile_gen(tokenizer, max_length),
+    "pnews": preprocess_pnews_gen(tokenizer, max_length), 
+    "pbaike": preprocess_pbaike_gen(tokenizer, max_length), 
+    "pshici": preprocess_pshici_gen(tokenizer, max_length), 
+    "plyrics": preprocess_plyrics_gen(tokenizer, max_length), 
+    "pcouplets": preprocess_pcouplets_gen(tokenizer, max_length), 
 }
 data_set = DataIter(
     paths,
@@ -68,6 +78,10 @@ train_loader = DataLoader(
 raw_model = LlamaForCausalLM(
     LlamaConfig(
         vocab_size=tokenizer.vocab_size,
+        hidden_size=1600,
+        intermediate_size=6400,
+        num_hidden_layers=48,
+        num_attention_heads=25,
         initializer_range=initializer_range,
         pad_token_id=tokenizer.pad_id,
         rms_norm_eps=1e-5,

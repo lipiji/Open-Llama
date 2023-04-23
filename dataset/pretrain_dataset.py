@@ -46,6 +46,68 @@ def preprocess_the_pile_gen(tokenizer, segment_max_length=1024):
 
     return preprocess_the_pile
 
+def preprocess_pbaike_gen(tokenizer, segment_max_length=1024):
+    def preprocess_pbaike(line):
+        total = line["title"] + "\n" + line["main_content"]
+        out = tokenizer(total)
+        input_ids = out["input_ids"]
+        return [
+            input_ids[i * segment_max_length : (i + 1) * segment_max_length]
+            for i in range(math.ceil(len(input_ids) / segment_max_length))
+        ]
+
+    return preprocess_pbaike
+
+def preprocess_pnews_gen(tokenizer, segment_max_length=1024):
+    def preprocess_pnews(line):
+        total = line["title"] + "\n" + line["text"]
+        out = tokenizer(total)
+        input_ids = out["input_ids"]
+        return [
+            input_ids[i * segment_max_length : (i + 1) * segment_max_length]
+            for i in range(math.ceil(len(input_ids) / segment_max_length))
+        ]
+
+    return preprocess_pnews
+
+def preprocess_pshici_gen(tokenizer, segment_max_length=1024):
+    def preprocess_pshici(line):
+        total = line["title"] + "\n" + line["author"] + "\n" + line["text"]
+        out = tokenizer(total)
+        input_ids = out["input_ids"]
+        return [
+            input_ids[i * segment_max_length : (i + 1) * segment_max_length]
+            for i in range(math.ceil(len(input_ids) / segment_max_length))
+        ]
+
+    return preprocess_pshici
+
+def preprocess_plyrics_gen(tokenizer, segment_max_length=1024):
+    def preprocess_plyrics(line):
+        total = line["title"] + "\n" + line["singer"] + "\n" + line["text"]
+        out = tokenizer(total)
+        input_ids = out["input_ids"]
+        return [
+            input_ids[i * segment_max_length : (i + 1) * segment_max_length]
+            for i in range(math.ceil(len(input_ids) / segment_max_length))
+        ]
+
+    return preprocess_plyrics
+
+def preprocess_pcouplets_gen(tokenizer, segment_max_length=1024):
+    def preprocess_pcouplets(line):
+        total = line["text"]
+        out = tokenizer(total)
+        input_ids = out["input_ids"]
+        return [
+            input_ids[i * segment_max_length : (i + 1) * segment_max_length]
+            for i in range(math.ceil(len(input_ids) / segment_max_length))
+        ]
+
+    return preprocess_pcouplets
+
+
+
 
 if __name__ == "__main__":
     import sentencepiece as spm

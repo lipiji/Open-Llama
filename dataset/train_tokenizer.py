@@ -58,6 +58,8 @@ random.shuffle(pcouplets_paths)
 paths = pile_paths[:150] + pbaike_paths[:15] + pnews_paths[:15] + wudao_paths[:8] \
         + pcouplets_paths + plyrics_paths[:5] + pshici_paths
 
+#paths = pile_paths[:5] + pnews_paths[:2]
+
 transform_dict = {
     "wudao": lambda line: line["title"] + "\n" + line["content"],
     "pile": lambda line: line["text"],
@@ -87,7 +89,7 @@ spm.SentencePieceTrainer.train(
     pad_id=3,
     model_type="BPE",
     vocab_size=100000,
-    num_threads=10,
+    num_threads=20,
     # split digits and fallback to byte same as Llama.
     # set split_by_unicode_script to True to avoid grouping punctuation and characters together.
     split_digits=True,
@@ -100,7 +102,7 @@ spm.SentencePieceTrainer.train(
 )
 
 # Serialize the model as file.
-with open("configs/10w_vocab_guyu.model", "wb") as f:
+with open("configs/10w_vocab_guyu_test.model", "wb") as f:
     f.write(model.getvalue())
 
 # Directly load the model from serialized model.
