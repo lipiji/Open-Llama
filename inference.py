@@ -59,11 +59,7 @@ def question_answer(prompt):
     return pred
 
 
-demo = gr.Interface(
-    fn=question_answer,
-    inputs="text",
-    outputs="text",
-    examples=[
+examples=[
         "帮我写一封邮件，内容是咨询教授本学期量子力学课程的时间表？并且希望教授推荐一些相关书籍",
         "情人节送女朋友什么礼物，预算500",
         "我今天肚子有点不舒服，晚饭有什么建议么",
@@ -71,9 +67,7 @@ demo = gr.Interface(
         "Can you explain to me what quantum mechanics is and how it relates to quantum computing?",
         "请帮我写一个AI驱动的幼儿教育APP的商业计划书",
         "用python实现一个快速排序",
-    ],
-    title="Open-Llama",
-    description="不基于其他预训练模型，完全使用[Open-Llama](https://github.com/Bayes-Song/Open-Llama)项目从0开始训练的Instruct-GPT模型，总训练成本不超过2w美元。由于请求需要经Gradio进行转发，可能出现请求丢失的现象，当长时间无响应（如20s以上）可刷新重试。当前体验服务生成的所有内容都是由人工智能模型生成，我们对其生成内容的准确性、完整性和功能性不做任何保证，并且其生成的内容不代表我们的态度或观点。",
-    article="联系方式: sl12160010@gmail.com  对于该项目有任何意见和建议都欢迎联系我",
-).queue(concurrency_count=1)
-demo.launch(share=True)
+]
+
+for e in examples:
+    question_answer(e)
