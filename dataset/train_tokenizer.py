@@ -55,8 +55,8 @@ pcouplets_paths = create_shard_kwargs(pcouplets_patterns)
 random.shuffle(pcouplets_paths)
 
 
-paths = pile_paths[:150] + pbaike_paths[:15] + pnews_paths[:15] + wudao_paths[:8] \
-        + pcouplets_paths + plyrics_paths[:5] + pshici_paths
+paths = pile_paths[:140] + pbaike_paths[:15] + pnews_paths[:15] + wudao_paths[:8] \
+        + pcouplets_paths + plyrics_paths[:3] + pshici_paths
 
 #paths = pile_paths[:5] + pnews_paths[:2]
 
