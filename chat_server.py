@@ -16,12 +16,16 @@ from transformers import LlamaForCausalLM, LlamaConfig
 
 
 sp_model = spm.SentencePieceProcessor(
-    model_file="configs/10w_vocab_wudao5_pile10.model"
+    model_file="configs/10w_vocab_guyu_test.model"
 )
 tokenizer = Tokenizer(sp_model)
 raw_model = LlamaForCausalLM(
     LlamaConfig(
         vocab_size=tokenizer.vocab_size,
+        hidden_size=1600,
+        intermediate_size=6400,
+        num_hidden_layers=48,
+        num_attention_heads=25,
         initializer_range=0.01,
         pad_token_id=tokenizer.pad_id,
         rms_norm_eps=1e-5,
@@ -32,7 +36,7 @@ raw_model = LlamaForCausalLM(
     )
 )
 ckpt = torch.load(
-    "data/saved_ckpt/instruction_tuning_math_code_multiturn/36001.pt",
+    "data/saved_ckpt/4800.pt",
     map_location="cpu",
 )
 raw_model.load_state_dict(ckpt)
