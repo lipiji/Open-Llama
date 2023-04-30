@@ -78,10 +78,10 @@ train_loader = DataLoader(
 raw_model = LlamaForCausalLM(
     LlamaConfig(
         vocab_size=tokenizer.vocab_size,
-        hidden_size=1600,
-        intermediate_size=6400,
-        num_hidden_layers=48,
-        num_attention_heads=25,
+        hidden_size=4096,
+        intermediate_size=16384,
+        num_hidden_layers=32,
+        num_attention_heads=32,
         initializer_range=initializer_range,
         pad_token_id=tokenizer.pad_id,
         rms_norm_eps=1e-5,

@@ -5,7 +5,7 @@ num_warmup_steps = 2000
 initializer_range = 1e-2
 lr = 2e-4
 weight_decay = 1e-1
-tokenizer_model_path = "configs/10w_vocab_guyu_test.model"
+tokenizer_model_path = "configs/10w_vocab_guyu.model"
 patterns = ["data/pretrain_data/part-*.jsonl.zst"]
 # global step
 log_interval = 5
