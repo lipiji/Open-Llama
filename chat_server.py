@@ -2,32 +2,34 @@
 Author: LiangSong(sl12160010@gmail.com)
 Date: 2023-04-06 22:30:10
 LastEditors: LiangSong(sl12160010@gmail.com)
-LastEditTime: 2023-04-07 23:03:31
+LastEditTime: 2023-04-29 20:40:13
 FilePath: /Open-Llama/chat_server.py
 Description: 
 
 Copyright (c) 2023 by LiangSong(sl12160010@gmail.com), All Rights Reserved. 
 """
 import torch
+import logging
 import gradio as gr
-import sentencepiece as spm
-from dataset.tokenizer import Tokenizer
-from transformers import LlamaForCausalLM, LlamaConfig
+from transformers import OpenLlamaForCausalLM, OpenLlamaConfig, LlamaTokenizer
 
 
-sp_model = spm.SentencePieceProcessor(
-    model_file="configs/10w_vocab_guyu_test.model"
+tokenizer = LlamaTokenizer(
+    "configs/10w_vocab_wudao5_pile10.model",
+    pad_token="<pad>",
+    add_bos_token=False,
+    add_eos_token=True,
 )
-tokenizer = Tokenizer(sp_model)
-raw_model = LlamaForCausalLM(
-    LlamaConfig(
+
+raw_model = OpenLlamaForCausalLM(
+    OpenLlamaConfig(
         vocab_size=tokenizer.vocab_size,
         hidden_size=1600,
         intermediate_size=6400,
         num_hidden_layers=48,
         num_attention_heads=25,
         initializer_range=0.01,
-        pad_token_id=tokenizer.pad_id,
+        pad_token_id=tokenizer.pad_token_id,
         rms_norm_eps=1e-5,
         hidden_dropout_prob=0.1,
         attention_dropout_prob=0.1,
@@ -39,10 +41,12 @@ ckpt = torch.load(
     "data/saved_ckpt/4800.pt",
     map_location="cpu",
 )
+if 'module' in ckpt:
+    ckpt = ckpt['module']
 raw_model.load_state_dict(ckpt)
 raw_model.eval()
 model = raw_model.cuda()
-print("ready")
+logging.warn("ready")
 
 
 def parse_codeblock(text):
@@ -73,7 +77,7 @@ with gr.Blocks() as demo:
     clear = gr.Button("Clear")
 
     def user(user_message, history):
-        print(user_message)
+        logging.warn(user_message)
         return "", history + [[user_message, None]]
 
     def bot(history):
@@ -84,12 +88,20 @@ with gr.Blocks() as demo:
             if completion is None:
                 inputs = "user:{}\nsystem:".format(prompt)
                 inputs = tokenizer(
-                    inputs, return_tensors=True, add_special_tokens=False
+                    inputs,
+                    return_tensors="pt",
+                    add_special_tokens=False,
+                    return_attention_mask=False,
                 )
                 context.append(inputs["input_ids"])
             else:
                 inputs = "user:{}\nsystem:{}".format(prompt, completion)
-                inputs = tokenizer(inputs, return_tensors=True, add_special_tokens=True)
+                inputs = tokenizer(
+                    inputs,
+                    return_tensors="pt",
+                    add_special_tokens=True,
+                    return_attention_mask=False,
+                )
                 context.append(inputs["input_ids"])
         context = torch.cat(context, dim=-1)
         context = context[:, -1024:]
@@ -97,8 +109,8 @@ with gr.Blocks() as demo:
         context = context.cuda()
         pred = model.generate(input_ids=context, max_new_tokens=512, do_sample=True)
         pred = pred[:, inputs_len:]
-        pred = tokenizer.decode(pred.cpu())[0]
-        print(pred)
+        pred = tokenizer.decode(pred.cpu()[0], skip_special_tokens=True)
+        logging.warn(pred)
         bot_message = parse_codeblock(pred)
         history[-1][1] = bot_message
         return history
