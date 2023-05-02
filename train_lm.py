@@ -59,6 +59,10 @@ def main(argv):
     raw_model = OpenLlamaForCausalLM(
         OpenLlamaConfig(
             vocab_size=tokenizer.vocab_size,
+            hidden_size=1600,
+            intermediate_size=6400,
+            num_hidden_layers=48,
+            num_attention_heads=25,
             initializer_range=config["model"]["initializer_range"],
             pad_token_id=tokenizer.pad_token_id,
             rms_norm_eps=1e-5,
@@ -70,6 +74,7 @@ def main(argv):
             ],
         )
     )
+    print("mode size=============" + str(raw_model.num_parameters()))
     if config["train"]["ckpt"] is not None:
         ckpt = torch.load(config["train"]["ckpt"])
         if 'module' in ckpt:
