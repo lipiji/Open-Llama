@@ -14,7 +14,8 @@ import wandb
 import torch
 import logging
 from torchinfo import summary
-from deepspeed.ops.adam import FusedAdam
+#from deepspeed.ops.adam import FusedAdam
+from apex.optimizers import FusedAdam
 from transformers import get_cosine_schedule_with_warmup
 
 from dataset.validation import val_set
