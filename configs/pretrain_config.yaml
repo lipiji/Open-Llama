@@ -7,7 +7,7 @@ data:
   sequence_sample_mode: "none"
   concat_multiple_sequence: True
   num_sequences: 10
-  seq_length: 512
+  seq_length: 1024
   tokenizer_model_path: "configs/10w_vocab_guyu.model"
 model:
   initializer_range: 1.0e-2
